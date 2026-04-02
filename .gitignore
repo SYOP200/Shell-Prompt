@@ -1,0 +1,33 @@
+### Shell Script Specifics ###
+# Log files
+*.log
+# Temporary files created by scripts
+tmp/
+temp/
+# Local environment overrides
+.env
+.env.local
+
+### Operating System Files ###
+# macOS
+.DS_Store
+.AppleDouble
+# Windows
+Thumbs.db
+ehthumbs.db
+
+### Editor/IDE Backups ###
+# Vim
+*~
+*.swp
+*.swo
+# VS Code
+.vscode/
+# JetBrains
+.idea/
+
+### Build & Test Artifacts ###
+# If using a testing framework like BATS or Shunit2
+out/
+dist/
+test-results/
