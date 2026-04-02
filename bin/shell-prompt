@@ -1,0 +1,67 @@
+#!/bin/sh
+
+SCRIPT_DIR=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
+PROJECT_ROOT=$(CDPATH= cd -- "$SCRIPT_DIR/.." && pwd)
+
+SP_ROOT=${SP_ROOT:-${XDG_CONFIG_HOME:-"$HOME/.config"}/shell-prompt}
+RUNTIME_ROOT=$PROJECT_ROOT
+
+usage() {
+  cat <<'EOF'
+Usage:
+  shell-prompt print [last_status]
+  shell-prompt list-items
+  shell-prompt init bash|zsh|fish
+  shell-prompt paths
+
+Environment:
+  SP_ROOT   Installed config directory, defaults to ~/.config/shell-prompt
+EOF
+}
+
+print_init() {
+  case ${1:-} in
+    bash)
+      printf '%s\n' 'source "${XDG_CONFIG_HOME:-$HOME/.config}/shell-prompt/prompt.bash"'
+      ;;
+    zsh)
+      printf '%s\n' 'source "${XDG_CONFIG_HOME:-$HOME/.config}/shell-prompt/prompt.zsh"'
+      ;;
+    fish)
+      printf '%s\n' 'source (set -q XDG_CONFIG_HOME; and echo $XDG_CONFIG_HOME; or echo $HOME/.config)/shell-prompt/prompt.fish'
+      ;;
+    *)
+      usage
+      exit 1
+      ;;
+  esac
+}
+
+print_paths() {
+  cat <<EOF
+PROJECT_ROOT=$PROJECT_ROOT
+SP_ROOT=$SP_ROOT
+EOF
+}
+
+cmd=${1:-}
+[ $# -gt 0 ] && shift
+
+case $cmd in
+  print)
+    exec "$RUNTIME_ROOT/prompt.sh" --print "${1:-0}"
+    ;;
+  list-items)
+    exec "$RUNTIME_ROOT/prompt.sh" --list-items
+    ;;
+  init)
+    print_init "$1"
+    ;;
+  paths)
+    print_paths
+    ;;
+  *)
+    usage
+    exit 1
+    ;;
+esac
